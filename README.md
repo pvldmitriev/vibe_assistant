@@ -43,7 +43,7 @@ vibe_assistant/
 
 1. Клонируйте репозиторий:
 ```bash
-git clone <repository-url>
+git clone https://github.com/pvldmitriev/vibe_assistant.git
 cd vibe_assistant
 ```
 
