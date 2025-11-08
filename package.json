@@ -1,0 +1,23 @@
+{
+  "name": "vibe-assistant",
+  "version": "1.0.0",
+  "description": "ИИ-наставник для вайбкодинга и запуска стартапов",
+  "private": true,
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up",
+    "build": "docker-compose build",
+    "start": "docker-compose up",
+    "stop": "docker-compose down",
+    "clean": "docker-compose down -v"
+  },
+  "keywords": [
+    "ai",
+    "assistant",
+    "vibeсoding",
+    "mvp",
+    "startup"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+

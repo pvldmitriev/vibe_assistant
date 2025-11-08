@@ -1,0 +1,65 @@
+# Структура проекта Vibe Assistant
+
+## Общая организация
+
+Проект организован как монорепозиторий с разделением на frontend и backend:
+
+```
+vibe_assistant/
+├── frontend/          # Next.js приложение
+├── backend/           # Node.js/Express API
+├── .cursor/rules/     # Правила для Cursor AI
+├── docs/              # Документация проекта
+└── scripts/           # Вспомогательные скрипты
+```
+
+## Frontend структура
+
+```
+frontend/
+├── src/
+│   ├── components/    # Переиспользуемые React компоненты
+│   ├── pages/         # Next.js страницы и роуты
+│   ├── services/      # API клиенты и бизнес-логика
+│   ├── styles/        # CSS/SCSS файлы
+│   └── utils/         # Утилиты и хелперы
+├── public/            # Статические файлы
+└── package.json       # Зависимости frontend
+```
+
+## Backend структура
+
+```
+backend/
+├── src/
+│   ├── routes/        # Express роуты/эндпоинты
+│   ├── services/      # Бизнес-логика и интеграции
+│   ├── models/        # Модели данных
+│   ├── middleware/    # Express middleware
+│   └── utils/         # Утилиты и хелперы
+├── server.js          # Точка входа приложения
+└── package.json       # Зависимости backend
+```
+
+## Принципы организации
+
+1. **Разделение ответственности**: Frontend отвечает за UI/UX, backend за бизнес-логику и AI интеграцию
+2. **Модульность**: Каждый сервис должен быть независимым и переиспользуемым
+3. **Масштабируемость**: Структура должна легко расширяться новыми функциями
+4. **Чистота кода**: Избегать дублирования, следовать DRY принципу
+
+## Именование файлов
+
+- Компоненты React: PascalCase (например, `IdeaInput.jsx`)
+- Сервисы: camelCase с суффиксом Service (например, `aiService.js`)
+- Утилиты: camelCase (например, `formatDate.js`)
+- Константы: UPPER_SNAKE_CASE в отдельном файле `constants.js`
+
+## Импорты
+
+Использовать относительные импорты для локальных модулей:
+```javascript
+import { apiClient } from '../services/api';
+import IdeaInput from '../components/IdeaInput';
+```
+

@@ -1,0 +1,177 @@
+# Стандарты кодирования
+
+## JavaScript/Node.js стандарты
+
+### Общие правила
+
+- Использовать ES6+ синтаксис
+- Предпочитать `const` и `let` вместо `var`
+- Использовать async/await вместо callback'ов
+- Избегать вложенных callback'ов (callback hell)
+
+### Именование
+
+```javascript
+// Переменные и функции: camelCase
+const userName = 'Ivan';
+function getUserData() {}
+
+// Классы и компоненты: PascalCase
+class UserService {}
+const IdeaInput = () => {};
+
+// Константы: UPPER_SNAKE_CASE
+const API_BASE_URL = 'http://localhost:3001';
+const MAX_RETRIES = 3;
+
+// Приватные методы: префикс _
+class Service {
+  _privateMethod() {}
+}
+```
+
+### Структура функций
+
+```javascript
+// Хорошо: функция делает одну вещь
+async function analyzeIdea(idea) {
+  const response = await aiService.analyze(idea);
+  return response;
+}
+
+// Плохо: функция делает слишком много
+async function analyzeIdeaAndGeneratePlanAndSaveToDatabase(idea) {
+  // ...
+}
+```
+
+### Обработка ошибок
+
+```javascript
+// Всегда использовать try-catch для async функций
+async function fetchData() {
+  try {
+    const data = await api.get('/data');
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error; // или вернуть дефолтное значение
+  }
+}
+```
+
+## React/Next.js стандарты
+
+### Компоненты
+
+```javascript
+// Функциональные компоненты с хуками
+import React, { useState, useEffect } from 'react';
+
+const IdeaInput = ({ onSubmit }) => {
+  const [idea, setIdea] = useState('');
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(idea);
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* JSX */}
+    </form>
+  );
+};
+
+export default IdeaInput;
+```
+
+### Props и PropTypes
+
+```javascript
+// Деструктуризация props
+const Component = ({ title, description, onAction }) => {
+  // ...
+};
+
+// Дефолтные значения
+const Component = ({ title = 'Без названия' }) => {
+  // ...
+};
+```
+
+### Hooks правила
+
+1. Вызывать хуки только на верхнем уровне
+2. Не вызывать хуки внутри условий или циклов
+3. Использовать useEffect для side effects
+4. Мемоизировать тяжелые вычисления через useMemo
+
+## API/Backend стандарты
+
+### REST API
+
+```javascript
+// Структура endpoint'ов
+POST   /api/analyze-idea       // Создать анализ
+POST   /api/generate-plan      // Создать план
+GET    /api/steps/:projectId   // Получить шаги
+POST   /api/steps/:stepId/complete  // Обновить статус
+```
+
+### Структура ответов
+
+```javascript
+// Успешный ответ
+{
+  success: true,
+  data: { ... },
+  message: 'Успешно'
+}
+
+// Ошибка
+{
+  success: false,
+  error: 'Описание ошибки',
+  code: 'ERROR_CODE'
+}
+```
+
+### Валидация входных данных
+
+```javascript
+// Всегда валидировать входные данные
+app.post('/api/analyze-idea', (req, res) => {
+  const { idea } = req.body;
+  
+  if (!idea || idea.trim().length === 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Идея не может быть пустой'
+    });
+  }
+  
+  // Обработка...
+});
+```
+
+## Комментарии
+
+```javascript
+// Хорошо: объясняет "почему", а не "что"
+// Используем экспоненциальную задержку для избежания rate limiting
+const delay = Math.pow(2, attempt) * 1000;
+
+// Плохо: объясняет очевидное
+// Увеличиваем counter на 1
+counter++;
+```
+
+## Форматирование
+
+- Отступы: 2 пробела
+- Точка с запятой: использовать
+- Кавычки: одинарные для JS, двойные для JSX
+- Максимальная длина строки: 100 символов
+- Пустая строка между логическими блоками
+

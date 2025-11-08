@@ -1,0 +1,130 @@
+---
+globs: *.mdc
+alwaysApply: false
+---
+# Rules Editing Workflow (ОБЯЗАТЕЛЬНОЕ ПРАВИЛО)
+
+## Описание
+Cursor AI не может редактировать файлы правил напрямую. Все операции с правилами должны выполняться через staging-процесс.
+
+## Создание нового правила
+
+1. **Создание файла в staging**
+   - Создать файл в `.cursor/rules-staging/`
+   - Имя файла: `<rule-name>.txt`
+   - ФОРМАТ: Plain text с расширением `.txt`
+
+2. **Написание содержимого**
+   - Написать содержимое правила в файле `.txt`
+   - Использовать Markdown синтаксис внутри файла
+
+3. **Переименование в .mdc**
+   - Переименовать файл с `.txt` на `.mdc`
+   - Команда: `mv .cursor/rules-staging/<rule-name>.txt .cursor/rules-staging/<rule-name>.mdc`
+
+4. **Перемещение в папку правил**
+   - Переместить файл из staging в финальную папку
+   - Команда: `mv .cursor/rules-staging/<rule-name>.mdc .cursor/rules/<rule-name>.mdc`
+
+## Редактирование существующего правила
+
+1. **Копирование в staging**
+   - Скопировать файл правила из `.cursor/rules/` в `.cursor/rules-staging/`
+   - Команда: `cp .cursor/rules/<rule-name>.mdc .cursor/rules-staging/<rule-name>.mdc`
+
+2. **Переименование в .txt**
+   - Переименовать в `.txt` для редактирования
+   - Команда: `mv .cursor/rules-staging/<rule-name>.mdc .cursor/rules-staging/<rule-name>.txt`
+
+3. **Редактирование**
+   - Отредактировать содержимое файла `.txt`
+
+4. **Переименование обратно в .mdc**
+   - Переименовать обратно в `.mdc`
+   - Команда: `mv .cursor/rules-staging/<rule-name>.txt .cursor/rules-staging/<rule-name>.mdc`
+
+5. **Перемещение обратно в папку правил**
+   - Переместить файл обратно (заменить старую версию)
+   - Команда: `mv .cursor/rules-staging/<rule-name>.mdc .cursor/rules/<rule-name>.mdc`
+
+## Запреты
+
+- ❌ **ЗАПРЕЩЕНО**: Прямое редактирование файлов в `.cursor/rules/`
+- ❌ **ЗАПРЕЩЕНО**: Создание файлов `.mdc` напрямую
+- ❌ **ЗАПРЕЩЕНО**: Использование инструментов `write`, `search_replace` напрямую на файлах в `.cursor/rules/`
+
+## Разрешено
+
+- ✅ **РАЗРЕШЕНО**: Создание/редактирование `.txt` файлов в `.cursor/rules-staging/`
+- ✅ **РАЗРЕШЕНО**: Переименование и перемещение через команды терминала
+- ✅ **РАЗРЕШЕНО**: Чтение файлов из `.cursor/rules/` для анализа
+
+## Структура папок
+
+```
+.cursor/
+├── rules/                    # Финальные правила (только чтение для AI)
+│   ├── ai-integration.mdc
+│   ├── code-standards.mdc
+│   ├── development-workflow.mdc
+│   ├── mvp-requirements.mdc
+│   ├── project-structure.mdc
+│   └── rules-editing-workflow.mdc
+└── rules-staging/            # Рабочая область для создания/редактирования
+    └── (временные .txt и .mdc файлы)
+```
+
+## Примеры команд
+
+### Создание нового правила
+```bash
+# 1. Создать .txt файл
+cat > .cursor/rules-staging/new-rule.txt << 'EOF'
+# Новое правило
+Содержимое...
+EOF
+
+# 2. Переименовать в .mdc
+mv .cursor/rules-staging/new-rule.txt .cursor/rules-staging/new-rule.mdc
+
+# 3. Переместить в rules
+mv .cursor/rules-staging/new-rule.mdc .cursor/rules/new-rule.mdc
+```
+
+### Редактирование существующего правила
+```bash
+# 1. Копировать в staging
+cp .cursor/rules/existing-rule.mdc .cursor/rules-staging/existing-rule.mdc
+
+# 2. Переименовать в .txt
+mv .cursor/rules-staging/existing-rule.mdc .cursor/rules-staging/existing-rule.txt
+
+# 3. Редактировать (через write tool)
+# ... редактирование ...
+
+# 4. Переименовать обратно
+mv .cursor/rules-staging/existing-rule.txt .cursor/rules-staging/existing-rule.mdc
+
+# 5. Переместить обратно
+mv .cursor/rules-staging/existing-rule.mdc .cursor/rules/existing-rule.mdc
+```
+
+## Важные замечания
+
+- Этот workflow обеспечивает безопасность и контроль над правилами
+- Staging-процесс позволяет избежать случайного повреждения действующих правил
+- Все изменения должны проходить через явные этапы: .txt → редактирование → .mdc → перемещение
+- При возникновении ошибок, файлы остаются в staging и не влияют на рабочие правила
+
+## Связь со SPEC
+
+SPEC-REF: spec/spec.yaml (раздел development-process)
+- Этот workflow является частью процесса разработки
+- Обеспечивает трассируемость изменений правил
+- Поддерживает принцип явного контроля изменений
+
+## Ответственность
+
+- **Cursor AI**: Должен строго следовать этому workflow
+- **Разработчик**: Может вручную управлять правилами, но рекомендуется следовать тому же процессу
+

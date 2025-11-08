@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: vibe-assistant-backend-dev
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - BACKEND_PORT=3001
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AI_MODEL=${AI_MODEL:-gpt-4}
+      - MAX_TOKENS=${MAX_TOKENS:-64000}
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - vibe-network
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: vibe-assistant-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    networks:
+      - vibe-network
+    command: npm run dev
+
+  telegram-bot:
+    build:
+      context: ./telegram-bot
+      dockerfile: Dockerfile.dev
+    container_name: vibe-assistant-telegram-bot-dev
+    environment:
+      - NODE_ENV=development
+      - BOT_TOKEN=${BOT_TOKEN}
+      - BACKEND_URL=http://backend:3001
+    volumes:
+      - ./telegram-bot:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - vibe-network
+    command: npm run dev
+
+networks:
+  vibe-network:
+    driver: bridge
+

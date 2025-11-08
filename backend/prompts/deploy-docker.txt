@@ -1,0 +1,238 @@
+ВАЖНО: WORKFLOW ДЛЯ ПРАВИЛ CURSOR
+Cursor не может напрямую редактировать .mdc файлы в .cursor/rules/
+
+===
+
+Задеплой проект через Docker (отлично для личного использования).
+
+PRD:
+{{prd}}
+
+ЦЕЛЬ ПРОЕКТА: {{goal}}
+
+===
+
+{{#if goal == "Использовать самому"}}
+ПОДХОД ДЛЯ ЛИЧНОГО ИСПОЛЬЗОВАНИЯ:
+- Docker Compose для простого запуска
+- Все сервисы в одном compose файле
+- Volumes для персистентности данных
+- Простые команды запуска/остановки
+{{/if}}
+
+===
+
+ПРЕДВАРИТЕЛЬНАЯ ПРОВЕРКА:
+
+□ Docker установлен (docker --version)
+□ Docker Compose установлен (docker-compose --version)
+□ Проект работает локально
+
+===
+
+ШАГИ:
+
+1. Создай Dockerfile в корне проекта:
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Копируем package files
+COPY package*.json ./
+
+# Устанавливаем зависимости
+RUN npm ci --production
+
+# Копируем остальные файлы
+COPY . .
+
+# {{#if category == "WEB_APP"}}
+# Билдим приложение (если нужно)
+RUN npm run build
+# {{/if}}
+
+# Создаем пользователя для безопасности
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+USER nodejs
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+```
+
+2. Создай docker-compose.yml:
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Добавь свои переменные окружения
+    {{#if category == "WEB_APP"}}
+    volumes:
+      # Для персистентных данных (если нужно)
+      - app-data:/app/data
+    {{/if}}
+    restart: unless-stopped
+
+{{#if category == "WEB_APP"}}
+volumes:
+  app-data:
+{{/if}}
+```
+
+3. Создай .dockerignore:
+
+```
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+README.md
+.DS_Store
+```
+
+===
+
+ЗАПУСК:
+
+1. Собери образ:
+```bash
+docker-compose build
+```
+
+2. Запусти контейнер:
+```bash
+docker-compose up -d
+```
+
+3. Проверь что работает:
+```bash
+docker-compose ps
+docker-compose logs
+```
+
+4. Открой http://localhost:3000
+
+===
+
+УПРАВЛЕНИЕ:
+
+```bash
+# Остановить
+docker-compose stop
+
+# Запустить снова
+docker-compose start
+
+# Перезапустить
+docker-compose restart
+
+# Остановить и удалить контейнеры
+docker-compose down
+
+# Пересобрать и перезапустить
+docker-compose up -d --build
+
+# Посмотреть логи
+docker-compose logs -f
+```
+
+===
+
+НАСТРОЙКА ПЕРЕМЕННЫХ ОКРУЖЕНИЯ:
+
+1. Создай .env файл в корне:
+```env
+NODE_ENV=production
+PORT=3000
+# Твои переменные
+```
+
+2. Обнови docker-compose.yml:
+```yaml
+services:
+  app:
+    env_file:
+      - .env
+```
+
+===
+
+ПРОВЕРКА ПОСЛЕ ЗАПУСКА:
+
+□ Контейнер запущен (docker-compose ps)
+□ Нет ошибок в логах (docker-compose logs)
+□ Приложение доступно на localhost:3000
+□ Основной функционал работает
+
+===
+
+{{#if goal == "Использовать самому"}}
+АВТОЗАПУСК ПРИ ЗАГРУЗКЕ СИСТЕМЫ:
+
+Docker контейнеры с restart: unless-stopped автоматически запустятся при перезагрузке компьютера.
+
+Чтобы Docker запускался автоматически:
+- macOS: Docker Desktop → Preferences → General → "Start Docker Desktop when you log in"
+- Linux: sudo systemctl enable docker
+{{/if}}
+
+===
+
+BACKUP ДАННЫХ (если используешь volumes):
+
+```bash
+# Создать backup
+docker-compose exec app tar czf /tmp/backup.tar.gz /app/data
+docker cp $(docker-compose ps -q app):/tmp/backup.tar.gz ./backup.tar.gz
+
+# Восстановить backup
+docker cp ./backup.tar.gz $(docker-compose ps -q app):/tmp/backup.tar.gz
+docker-compose exec app tar xzf /tmp/backup.tar.gz -C /app/data
+```
+
+===
+
+ОБНОВЛЕНИЕ:
+
+1. Остановить контейнеры:
+```bash
+docker-compose down
+```
+
+2. Обновить код (git pull или другое)
+
+3. Пересобрать и запустить:
+```bash
+docker-compose up -d --build
+```
+
+===
+
+TROUBLESHOOTING:
+
+Если что-то не работает:
+1. Проверь логи: docker-compose logs
+2. Проверь что порт не занят: lsof -i :3000
+3. Пересобери с нуля: 
+   ```bash
+   docker-compose down -v
+   docker-compose up -d --build
+   ```
+
+===
+
+ГОТОВО! 🎉
+Твой проект работает в Docker!
+
