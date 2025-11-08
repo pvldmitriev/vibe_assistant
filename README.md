@@ -18,6 +18,7 @@ vibe_assistant/
 ├── frontend/          # Next.js приложение (React)
 ├── backend/           # Node.js/Express API
 ├── telegram-bot/      # Telegram бот
+├── src/              # React + Vite фронтенд (из vibe-enhancer-buddy)
 ├── .cursor/rules/     # Правила для Cursor AI
 ├── docs/              # Документация
 └── scripts/           # Вспомогательные скрипты
@@ -25,7 +26,7 @@ vibe_assistant/
 
 ### Технологии
 
-- **Frontend**: Next.js 14, React, TailwindCSS
+- **Frontend**: React + Vite, TypeScript, TailwindCSS, shadcn-ui
 - **Backend**: Node.js, Express
 - **Telegram Bot**: Telegraf
 - **AI**: OpenAI API (GPT-4)
@@ -38,6 +39,7 @@ vibe_assistant/
 - Docker и Docker Compose
 - OpenAI API ключ (получите на https://platform.openai.com/api-keys)
 - Telegram Bot Token (опционально, для Telegram бота)
+- Node.js & npm (для локальной разработки)
 
 ### Установка
 
@@ -59,22 +61,32 @@ BOT_TOKEN=your-telegram-bot-token  # опционально
 ```
 
 4. Запустите приложение:
+
+**Вариант 1: Docker (рекомендуется)**
 ```bash
 npm run dev
 ```
 
+**Вариант 2: Локальная разработка**
+```bash
+npm i
+npm run dev
+```
+
 Приложение будет доступно:
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:3000 (Vite) или http://localhost:3000 (Next.js)
 - Backend API: http://localhost:3001
 - Telegram Bot: автоматически подключится к @your_bot
 
 ### Команды
 
 - `npm run dev` - Запуск в режиме разработки
-- `npm run build` - Сборка Docker образов
+- `npm run build` - Сборка Docker образов или Vite сборка
 - `npm run start` - Запуск в production режиме
 - `npm run stop` - Остановка контейнеров
 - `npm run clean` - Полная очистка (контейнеры + volumes)
+- `npm run lint` - Проверка кода линтером
+- `npm run preview` - Предпросмотр production сборки
 
 ## Основной сценарий использования
 
@@ -130,6 +142,7 @@ npm run dev
 - ✅ Создание пошагового плана
 - ✅ Промпты для IDE агентов
 - ✅ Отслеживание прогресса
+- ✅ React + Vite фронтенд с shadcn-ui
 
 Не входит в MVP:
 - ❌ Аутентификация пользователей
@@ -140,4 +153,3 @@ npm run dev
 ## Лицензия
 
 MIT
-
