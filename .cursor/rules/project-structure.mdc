@@ -6,8 +6,9 @@
 
 ```
 vibe_assistant/
-├── frontend/          # Next.js приложение
+├── src/               # React + Vite фронтенд
 ├── backend/           # Node.js/Express API
+├── telegram-bot/      # Telegram бот
 ├── .cursor/rules/     # Правила для Cursor AI
 ├── docs/              # Документация проекта
 └── scripts/           # Вспомогательные скрипты
@@ -16,15 +17,16 @@ vibe_assistant/
 ## Frontend структура
 
 ```
-frontend/
-├── src/
-│   ├── components/    # Переиспользуемые React компоненты
-│   ├── pages/         # Next.js страницы и роуты
-│   ├── services/      # API клиенты и бизнес-логика
-│   ├── styles/        # CSS/SCSS файлы
-│   └── utils/         # Утилиты и хелперы
-├── public/            # Статические файлы
-└── package.json       # Зависимости frontend
+src/
+├── components/        # Переиспользуемые React компоненты
+│   ├── ui/           # shadcn-ui компоненты
+│   └── ...           # Бизнес-компоненты
+├── pages/            # React Router страницы
+├── hooks/            # React хуки
+├── lib/              # Утилиты и хелперы
+├── App.tsx           # Главный компонент
+├── main.tsx          # Точка входа
+└── index.css         # Глобальные стили
 ```
 
 ## Backend структура

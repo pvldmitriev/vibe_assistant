@@ -21,26 +21,6 @@ services:
       - vibe-network
     command: npm run dev
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    container_name: vibe-assistant-frontend-dev
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      - backend
-    networks:
-      - vibe-network
-    command: npm run dev
-
   telegram-bot:
     build:
       context: ./telegram-bot

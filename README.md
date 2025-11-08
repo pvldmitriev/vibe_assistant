@@ -15,10 +15,9 @@ Vibe Assistant — это сервис-помощник для запуска п
 
 ```
 vibe_assistant/
-├── frontend/          # Next.js приложение (React)
+├── src/              # React + Vite фронтенд
 ├── backend/           # Node.js/Express API
 ├── telegram-bot/      # Telegram бот
-├── src/              # React + Vite фронтенд (из vibe-enhancer-buddy)
 ├── .cursor/rules/     # Правила для Cursor AI
 ├── docs/              # Документация
 └── scripts/           # Вспомогательные скрипты
@@ -62,31 +61,36 @@ BOT_TOKEN=your-telegram-bot-token  # опционально
 
 4. Запустите приложение:
 
-**Вариант 1: Docker (рекомендуется)**
-```bash
-npm run dev
-```
-
-**Вариант 2: Локальная разработка**
+**Вариант 1: Локальная разработка (рекомендуется)**
 ```bash
 npm i
 npm run dev
 ```
 
+**Вариант 2: Docker (только backend и telegram-bot)**
+```bash
+npm run dev:docker
+```
+
 Приложение будет доступно:
-- Frontend: http://localhost:3000 (Vite) или http://localhost:3000 (Next.js)
+- Frontend: http://localhost:3000 (Vite dev server)
 - Backend API: http://localhost:3001
 - Telegram Bot: автоматически подключится к @your_bot
 
 ### Команды
 
-- `npm run dev` - Запуск в режиме разработки
-- `npm run build` - Сборка Docker образов или Vite сборка
+**Frontend (React + Vite):**
+- `npm run dev` - Запуск Vite dev server (http://localhost:3000)
+- `npm run build` - Production сборка фронтенда
+- `npm run preview` - Предпросмотр production сборки
+- `npm run lint` - Проверка кода линтером
+
+**Backend и Telegram Bot (Docker):**
+- `npm run dev:docker` - Запуск backend и telegram-bot в Docker
+- `npm run build:docker` - Сборка Docker образов
 - `npm run start` - Запуск в production режиме
 - `npm run stop` - Остановка контейнеров
 - `npm run clean` - Полная очистка (контейнеры + volumes)
-- `npm run lint` - Проверка кода линтером
-- `npm run preview` - Предпросмотр production сборки
 
 ## Основной сценарий использования
 

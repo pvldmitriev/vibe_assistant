@@ -26,25 +26,6 @@ services:
       retries: 3
       start_period: 40s
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: vibe-assistant-frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      # BACKEND_URL для server-side API routes (без NEXT_PUBLIC_ префикса)
-      - BACKEND_URL=http://backend:3001
-      # NEXT_PUBLIC_API_URL для client-side (но не используется, т.к. используем /api)
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-    depends_on:
-      - backend
-    networks:
-      - vibe-network
-    restart: unless-stopped
-
   telegram-bot:
     build:
       context: ./telegram-bot
